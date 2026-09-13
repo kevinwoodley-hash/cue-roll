@@ -549,7 +549,8 @@
     bgBlur: false, smooth: false,
     segmenter: null, segmenterLoading: false, segmenterFailed: false,
     maskBitmap: null, segFrameCounter: 0,
-    workCanvas: null, workCtx: null, maskCanvas: null, maskCtx: null, cutCanvas: null, cutCtx: null
+    workCanvas: null, workCtx: null, maskCanvas: null, maskCtx: null, cutCanvas: null, cutCtx: null,
+    bgSmallCanvas: null, bgSmallCtx: null
   };
 
   var $ = function(id){ return document.getElementById(id); };
@@ -838,8 +839,27 @@
     cutCtx.globalCompositeOperation = "source-over";
 
     ctx.clearRect(0, 0, w, h);
-    ctx.filter = state.bgBlur ? (filterCss + " blur(22px)") : filterCss;
-    ctx.drawImage(v, sx, sy, cropW, cropH, 0, 0, w, h);
+    if (state.bgBlur) {
+      // A blur radius in canvas pixels is nearly invisible on a 1080p+ camera frame once
+      // it's scaled down to fit the screen. Instead, downsample the background to a tiny
+      // image and blow it back up — the resolution loss itself is the blur, and it stays
+      // strong no matter the source resolution.
+      if (!state.bgSmallCanvas) {
+        state.bgSmallCanvas = document.createElement("canvas");
+        state.bgSmallCtx = state.bgSmallCanvas.getContext("2d");
+      }
+      var smallW = 64, smallH = Math.max(1, Math.round(smallW * (h / w)));
+      state.bgSmallCanvas.width = smallW;
+      state.bgSmallCanvas.height = smallH;
+      state.bgSmallCtx.filter = filterCss;
+      state.bgSmallCtx.clearRect(0, 0, smallW, smallH);
+      state.bgSmallCtx.drawImage(v, sx, sy, cropW, cropH, 0, 0, smallW, smallH);
+      ctx.filter = "blur(6px)";
+      ctx.drawImage(state.bgSmallCanvas, 0, 0, smallW, smallH, 0, 0, w, h);
+    } else {
+      ctx.filter = filterCss;
+      ctx.drawImage(v, sx, sy, cropW, cropH, 0, 0, w, h);
+    }
     ctx.filter = "none";
     ctx.drawImage(cut, 0, 0);
   }
