@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cue Roll</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="data:image/png;base64,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">
+<link rel="apple-touch-icon" href="data:image/png;base64,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">
+<meta name="description" content="A phone teleprompter that scrolls your script over the live camera so you can read your lines while you record.">
+<meta name="theme-color" content="#14161a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Cue Roll">
+<style>
+  :root{
+    --bg:#14161a;
+    --surface:#1c1f24;
+    --surface-2:#262a31;
+    --surface-3:#2f343c;
+    --border:rgba(255,255,255,0.09);
+    --border-strong:rgba(255,255,255,0.16);
+    --text:#edeef0;
+    --text-dim:#9aa0aa;
+    --text-faint:#666c76;
+    --accent-standby:#ffb020;
+    --accent-standby-ink:#1c1300;
+    --accent-rec:#ff3b30;
+    --accent-good:#2fbf71;
+    --accent-good-ink:#052e18;
+    --scrim:rgba(9,10,12,0.8);
+    --font-display:"Big Shoulders Display", "Arial Narrow", sans-serif;
+    --font-body:"Public Sans", -apple-system, "Segoe UI", sans-serif;
+    --font-mono:"IBM Plex Mono", "SF Mono", Consolas, monospace;
+  }
+
+  *{ box-sizing:border-box; }
+  html{ background:var(--bg); color-scheme:dark; }
+  body{ background:var(--bg); color:var(--text); font-family:var(--font-body); }
+
+  #app{ position:relative; min-height:100vh; min-height:100dvh; }
+
+  button{ font-family:inherit; color:inherit; }
+  textarea, input{ font-family:inherit; }
+
+  button:focus-visible, [tabindex]:focus-visible, input:focus-visible, textarea:focus-visible{
+    outline:2px solid var(--accent-standby);
+    outline-offset:2px;
+  }
+
+  .screen{ display:none; }
+  .screen.active{ display:flex; flex-direction:column; }
+
+  /* ---------- shared bits ---------- */
+  .mono{ font-family:var(--font-mono); font-variant-numeric:tabular-nums; }
+
+  .topbar{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 20px 14px;
+    border-bottom:1px solid var(--border);
+  }
+  .brand{ display:flex; align-items:center; gap:10px; }
+  .brand-mark{ color:var(--accent-standby); font-size:11px; line-height:1; }
+  .brand-mark.good{ color:var(--accent-good); }
+  .brand-name{
+    font-family:var(--font-display); font-weight:700; letter-spacing:0.08em;
+    font-size:15px; text-transform:uppercase; color:var(--text);
+  }
+  .take-readout{ display:flex; align-items:baseline; gap:6px; font-family:var(--font-display); }
+  .take-readout.small{ font-size:12px; }
+  .take-label{ font-size:11px; letter-spacing:0.12em; color:var(--text-faint); text-transform:uppercase; }
+  .take-num{ font-size:18px; font-weight:800; color:var(--text); }
+
+  .cta-btn{
+    appearance:none; border:none; border-radius:14px;
+    background:var(--accent-standby); color:var(--accent-standby-ink);
+    font-family:var(--font-display); font-weight:800; letter-spacing:0.04em;
+    font-size:17px; text-transform:uppercase;
+    padding:16px 20px; width:100%;
+    cursor:pointer;
+  }
+  .cta-btn:active{ transform:scale(0.99); }
+  .cta-btn.small{ width:auto; padding:11px 22px; font-size:14px; border-radius:11px; }
+  .cta-btn:disabled{ opacity:0.6; }
+
+  .secondary-btn{
+    appearance:none; border:1px solid var(--border-strong); border-radius:12px;
+    background:var(--surface-2); color:var(--text);
+    font-family:var(--font-body); font-weight:600; font-size:14.5px;
+    padding:13px 16px; flex:1; cursor:pointer;
+  }
+  .secondary-btn:active{ background:var(--surface-3); }
+
+  .linklike{
+    appearance:none; background:none; border:none; padding:0;
+    color:var(--text-dim); font-size:13px; text-decoration:underline;
+    text-underline-offset:3px; cursor:pointer;
+  }
+
+  /* ---------- setup screen ---------- */
+  #screen-setup{ padding-bottom:env(safe-area-inset-bottom); }
+
+  .setup-main{
+    flex:1; width:100%; max-width:640px; margin:0 auto;
+    padding:22px 20px 28px; display:flex; flex-direction:column; gap:28px;
+  }
+
+  .field-block{ display:flex; flex-direction:column; gap:8px; }
+  .field-head{ display:flex; align-items:baseline; justify-content:space-between; gap:12px; }
+  .field-head label{
+    font-family:var(--font-display); font-weight:700; letter-spacing:0.06em;
+    text-transform:uppercase; font-size:13px; color:var(--text-dim);
+  }
+  .field-hint{ font-size:12.5px; color:var(--text-faint); font-family:var(--font-mono); white-space:nowrap; }
+
+  #scriptInput{
+    background:var(--surface); border:1px solid var(--border); border-radius:16px;
+    color:var(--text); font-size:17px; line-height:1.55; padding:16px 17px;
+    min-height:220px; resize:vertical; width:100%;
+  }
+  #scriptInput::placeholder{ color:var(--text-faint); }
+
+  .script-actions{ display:flex; justify-content:flex-end; }
+
+  .settings-grid{ display:flex; flex-direction:column; gap:20px; }
+  .setting{ display:flex; flex-direction:column; gap:10px; }
+  .setting-head{
+    display:flex; align-items:center; justify-content:space-between;
+    font-size:14.5px; font-weight:600; color:var(--text);
+  }
+  .setting-note{ font-weight:400; color:var(--text-faint); font-size:12.5px; }
+
+  input[type="range"]{
+    -webkit-appearance:none; appearance:none; width:100%; height:32px;
+    background:transparent; margin:0;
+  }
+  input[type="range"]::-webkit-slider-runnable-track{
+    height:6px; border-radius:3px; background:var(--surface-3);
+  }
+  input[type="range"]::-webkit-slider-thumb{
+    -webkit-appearance:none; appearance:none; width:24px; height:24px; margin-top:-9px;
+    border-radius:50%; background:var(--accent-standby); border:3px solid var(--bg);
+    box-shadow:0 0 0 1px var(--border-strong);
+  }
+  input[type="range"]::-moz-range-track{ height:6px; border-radius:3px; background:var(--surface-3); }
+  input[type="range"]::-moz-range-thumb{
+    width:18px; height:18px; border:3px solid var(--bg); border-radius:50%;
+    background:var(--accent-standby);
+  }
+
+  .segmented{
+    display:flex; background:var(--surface); border:1px solid var(--border);
+    border-radius:11px; padding:3px; gap:3px;
+  }
+  .segmented button{
+    flex:1; appearance:none; border:none; background:transparent; color:var(--text-dim);
+    padding:9px 10px; border-radius:8px; font-size:14px; font-weight:600; cursor:pointer;
+  }
+  .segmented button.active{ background:var(--surface-3); color:var(--text); }
+
+  .switch-row{
+    display:flex; align-items:center; justify-content:space-between; gap:14px;
+    font-size:14.5px; font-weight:600; color:var(--text); cursor:pointer;
+  }
+  .switch{ position:relative; width:46px; height:28px; flex:none; }
+  .switch input{ position:absolute; inset:0; opacity:0; margin:0; cursor:pointer; }
+  .switch-track{
+    position:absolute; inset:0; border-radius:999px; background:var(--surface-3);
+    border:1px solid var(--border-strong); transition:background 0.15s ease;
+  }
+  .switch-track::after{
+    content:""; position:absolute; top:2px; left:2px; width:22px; height:22px;
+    border-radius:50%; background:var(--text-dim); transition:transform 0.15s ease, background 0.15s ease;
+  }
+  .switch input:checked + .switch-track{ background:rgba(255,176,32,0.28); border-color:var(--accent-standby); }
+  .switch input:checked + .switch-track::after{ transform:translateX(18px); background:var(--accent-standby); }
+
+  .setup-footer{
+    max-width:640px; margin:0 auto; width:100%; padding:0 20px 26px;
+    display:flex; flex-direction:column; gap:12px;
+  }
+  .cam-note{ font-size:12.5px; color:var(--text-faint); line-height:1.5; text-align:center; }
+
+  /* ---------- live screen ---------- */
+  #screen-live.active{
+    position:fixed; inset:0; height:100vh; height:100dvh; overflow:hidden;
+  }
+  #cameraPreview{
+    position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+    background:#050607;
+  }
+
+  .hud-top{
+    position:absolute; top:0; left:0; right:0; z-index:5;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:calc(env(safe-area-inset-top) + 14px) 16px 12px;
+    background:linear-gradient(to bottom, rgba(9,10,12,0.72), transparent);
+  }
+  .hud-btn{
+    appearance:none; border:none; border-radius:50%; width:36px; height:36px;
+    background:var(--scrim); color:var(--text); font-size:15px; cursor:pointer;
+  }
+  .hud-center{ display:flex; align-items:center; gap:8px; }
+  .rec-dot{
+    width:9px; height:9px; border-radius:50%; background:var(--accent-standby);
+    box-shadow:0 0 8px rgba(255,176,32,0.7);
+  }
+  .rec-dot.live{ background:var(--accent-rec); box-shadow:0 0 10px rgba(255,59,48,0.85); animation:pulse 1.1s ease-in-out infinite; }
+  @media (prefers-reduced-motion:reduce){ .rec-dot.live{ animation:none; } }
+  @keyframes pulse{ 0%,100%{ opacity:1; } 50%{ opacity:0.35; } }
+  .rec-label{ font-family:var(--font-display); font-size:12px; font-weight:700; letter-spacing:0.08em; color:var(--text-dim); }
+  .timecode{ font-size:14px; color:var(--text); }
+
+  .prompter-wrap{
+    position:absolute; left:0; right:0; top:16%; height:36%; z-index:4;
+    display:flex; padding:0 18px;
+  }
+  .prompter-panel{
+    position:relative; flex:1; overflow:hidden; border-radius:18px;
+    background:var(--scrim); backdrop-filter:blur(7px); -webkit-backdrop-filter:blur(7px);
+    border:1px solid rgba(255,255,255,0.08);
+  }
+  .reading-line{
+    position:absolute; top:50%; left:0; right:0; height:1px;
+    background:linear-gradient(to right, var(--accent-standby), transparent 70%);
+    opacity:0.55; z-index:1;
+  }
+  .prompter-scroll{ padding:20px 22px 60% ; will-change:transform; }
+  #prompterText{
+    margin:0; font-size:28px; line-height:1.5; font-weight:500; color:var(--text);
+    white-space:pre-wrap;
+  }
+  #prompterText.size-s{ font-size:20px; }
+  #prompterText.size-m{ font-size:28px; }
+  #prompterText.size-l{ font-size:36px; }
+  #prompterText.size-xl{ font-size:46px; }
+  .prompter-panel.mirrored #prompterText{ transform:scaleX(-1); }
+
+  .countdown-overlay{
+    position:absolute; inset:0; z-index:8; background:rgba(9,10,12,0.55);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .countdown-overlay span{
+    font-family:var(--font-display); font-weight:800; font-size:120px; color:var(--text);
+  }
+
+  .hud-bottom{
+    position:absolute; left:0; right:0; bottom:0; z-index:5;
+    display:flex; align-items:center; justify-content:space-between; gap:8px;
+    padding:14px 16px calc(env(safe-area-inset-bottom) + 16px);
+    background:linear-gradient(to top, rgba(9,10,12,0.78), transparent);
+  }
+  .tray-btn{
+    appearance:none; border:none; background:none; color:var(--text-dim);
+    display:flex; flex-direction:column; align-items:center; gap:4px;
+    padding:6px; cursor:pointer; min-width:52px;
+  }
+  .tray-icon{ font-size:20px; color:var(--text); }
+  .tray-label{ font-family:var(--font-display); font-size:10.5px; letter-spacing:0.06em; text-transform:uppercase; }
+  .wpm-nudge{ display:flex; flex-direction:column; gap:6px; }
+  .tray-btn.small{
+    background:var(--scrim); border-radius:50%; width:34px; height:34px;
+    align-items:center; justify-content:center; font-size:17px; font-weight:700; min-width:0; padding:0;
+  }
+
+  .record-btn{
+    appearance:none; border:none; background:none; cursor:pointer;
+    width:66px; height:66px; flex:none; padding:0;
+  }
+  .record-ring{
+    width:66px; height:66px; border-radius:50%; border:3px solid var(--text);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .record-dot{
+    width:52px; height:52px; border-radius:50%; background:var(--accent-rec);
+    transition:border-radius 0.15s ease, width 0.15s ease, height 0.15s ease;
+  }
+  .record-btn.active .record-dot{ width:26px; height:26px; border-radius:7px; }
+
+  .cam-error{
+    position:absolute; inset:0; z-index:9; background:rgba(9,10,12,0.92);
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px;
+    padding:32px; text-align:center;
+  }
+  .cam-error p{ max-width:320px; color:var(--text-dim); font-size:15px; line-height:1.5; }
+
+  /* ---------- review screen ---------- */
+  #screen-review.active{ position:fixed; inset:0; height:100vh; height:100dvh; }
+  .review-main{
+    flex:1; display:flex; align-items:center; justify-content:center;
+    background:#000; overflow:hidden; padding:0;
+  }
+  #reviewVideo{ max-width:100%; max-height:100%; width:100%; height:100%; object-fit:contain; }
+  .review-footer{
+    padding:16px 20px calc(env(safe-area-inset-bottom) + 18px);
+    display:flex; flex-direction:column; gap:12px; border-top:1px solid var(--border);
+    background:var(--bg);
+  }
+  .review-row{ display:flex; gap:10px; }
+  .save-note{ min-height:16px; font-size:13px; color:var(--text-dim); text-align:center; }
+
+  @media (min-width:720px){
+    .prompter-wrap{ left:12%; right:12%; }
+  }
+</style>
+</head>
+<body>
+
+
+<div id="app">
+
+  <section id="screen-setup" class="screen active">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark">●</span><span class="brand-name">Cue Roll</span></div>
+      <div class="take-readout"><span class="take-label">Take</span><span class="take-num" id="takeNumSetup">01</span></div>
+    </header>
+
+    <main class="setup-main">
+      <div class="field-block">
+        <div class="field-head">
+          <label for="scriptInput">Script</label>
+          <span class="field-hint" id="wordCountHint">0 words · 0:00 read</span>
+        </div>
+        <textarea id="scriptInput" spellcheck="false"></textarea>
+        <div class="script-actions">
+          <button type="button" id="clearScriptBtn" class="linklike">Clear example text</button>
+        </div>
+      </div>
+
+      <div class="settings-grid">
+        <div class="setting">
+          <div class="setting-head"><span>Reading pace</span><span class="mono" id="wpmReadout">140 wpm</span></div>
+          <input type="range" id="wpmSlider" min="80" max="220" step="5" value="140" aria-label="Reading pace in words per minute">
+        </div>
+
+        <div class="setting">
+          <div class="setting-head"><span>Text size</span></div>
+          <div class="segmented" id="sizeSegmented" role="group" aria-label="Text size">
+            <button type="button" data-size="s">S</button>
+            <button type="button" data-size="m" class="active">M</button>
+            <button type="button" data-size="l">L</button>
+            <button type="button" data-size="xl">XL</button>
+          </div>
+        </div>
+
+        <div class="setting">
+          <div class="setting-head"><span>Camera</span></div>
+          <div class="segmented" id="facingSegmented" role="group" aria-label="Camera facing">
+            <button type="button" data-facing="user" class="active">Front</button>
+            <button type="button" data-facing="environment">Back</button>
+          </div>
+        </div>
+
+        <div class="setting">
+          <label class="switch-row" for="mirrorToggle">
+            <span>Mirror text <span class="setting-note">— for a beam‑splitter glass rig</span></span>
+            <span class="switch"><input type="checkbox" id="mirrorToggle"><span class="switch-track"></span></span>
+          </label>
+        </div>
+
+        <div class="setting">
+          <label class="switch-row" for="countdownToggle">
+            <span>3‑2‑1 countdown before rolling</span>
+            <span class="switch"><input type="checkbox" id="countdownToggle" checked><span class="switch-track"></span></span>
+          </label>
+        </div>
+      </div>
+    </main>
+
+    <footer class="setup-footer">
+      <button type="button" id="startBtn" class="cta-btn">Go to camera</button>
+      <p class="cam-note">Recording captures the camera and mic only — the scrolling script is just for you to read, like the glass on a real teleprompter.</p>
+    </footer>
+  </section>
+
+  <section id="screen-live" class="screen">
+    <video id="cameraPreview" autoplay muted playsinline></video>
+
+    <div class="hud-top">
+      <button type="button" id="exitLiveBtn" class="hud-btn" aria-label="Back to script">✕</button>
+      <div class="hud-center">
+        <span class="rec-dot" id="recDot"></span>
+        <span class="rec-label" id="recLabel">STANDBY</span>
+        <span class="mono timecode" id="timecode">0:00</span>
+      </div>
+      <div class="take-readout small"><span class="take-label">Take</span><span class="take-num" id="takeNumLive">01</span></div>
+    </div>
+
+    <div class="prompter-wrap">
+      <div class="prompter-panel" id="prompterPanel">
+        <div class="reading-line"></div>
+        <div class="prompter-scroll" id="prompterScroll">
+          <p id="prompterText"></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="countdown-overlay" id="countdownOverlay" hidden><span id="countdownNum">3</span></div>
+
+    <div class="hud-bottom">
+      <button type="button" id="flipCamBtn" class="tray-btn" aria-label="Flip camera">
+        <span class="tray-icon">⟲</span><span class="tray-label">Flip</span>
+      </button>
+      <button type="button" id="restartScrollBtn" class="tray-btn" aria-label="Restart script from the top">
+        <span class="tray-icon">↺</span><span class="tray-label">Restart</span>
+      </button>
+      <button type="button" id="playPauseBtn" class="tray-btn" aria-label="Rehearse scroll without recording">
+        <span class="tray-icon" id="playPauseIcon">▶</span><span class="tray-label">Rehearse</span>
+      </button>
+      <button type="button" id="recordBtn" class="record-btn" aria-label="Start recording">
+        <span class="record-ring"><span class="record-dot" id="recordDotShape"></span></span>
+      </button>
+      <div class="wpm-nudge">
+        <button type="button" id="wpmUpBtn" class="tray-btn small" aria-label="Speed up">+</button>
+        <button type="button" id="wpmDownBtn" class="tray-btn small" aria-label="Slow down">−</button>
+      </div>
+    </div>
+
+    <div class="cam-error" id="camError" hidden>
+      <p id="camErrorText">Camera access is needed to record.</p>
+      <button type="button" id="retryCamBtn" class="cta-btn small">Try again</button>
+    </div>
+  </section>
+
+  <section id="screen-review" class="screen">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark good">●</span><span class="brand-name">Take <span id="takeNumReview">01</span> done</span></div>
+      <span class="mono" id="reviewDuration">0:00</span>
+    </header>
+    <main class="review-main">
+      <video id="reviewVideo" controls playsinline></video>
+    </main>
+    <footer class="review-footer">
+      <button type="button" id="saveBtn" class="cta-btn" style="background:var(--accent-good); color:var(--accent-good-ink);">Save video</button>
+      <div class="review-row">
+        <button type="button" id="retakeBtn" class="secondary-btn">Retake</button>
+        <button type="button" id="newScriptBtn" class="secondary-btn">New script</button>
+      </div>
+      <p class="save-note" id="saveNote" aria-live="polite"></p>
+    </footer>
+  </section>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var EXAMPLE_SCRIPT = "Hey — I'm just testing out Cue Roll before my real recording.\n\nIf you're seeing these words scroll by while you're on camera, it's working: the text moves at a steady pace so you can read it without staring down at your phone or losing your place.\n\nOnce you're happy with the speed and text size, clear this out and drop in your real script. Three, two, one — action.";
+
+  var state = {
+    wpm: 140, size: "m", facing: "user", mirror: false, countdown: true,
+    take: 1, scriptWords: 0, durationMs: 4000,
+    scrolling: false, recording: false,
+    scrollStartTs: 0, scrollPausedOffset: 0, scrollRange: 0, scrollRAF: null,
+    stream: null, recorder: null, chunks: [], recordedMime: "", recordedBlob: null,
+    recordStartTime: 0, timerInterval: null
+  };
+
+  var $ = function(id){ return document.getElementById(id); };
+  var scriptInput = $("scriptInput"), wordCountHint = $("wordCountHint");
+  var wpmSlider = $("wpmSlider"), wpmReadout = $("wpmReadout");
+  var sizeSegmented = $("sizeSegmented"), facingSegmented = $("facingSegmented");
+  var mirrorToggle = $("mirrorToggle"), countdownToggle = $("countdownToggle");
+  var startBtn = $("startBtn"), clearScriptBtn = $("clearScriptBtn");
+  var takeNumSetup = $("takeNumSetup"), takeNumLive = $("takeNumLive"), takeNumReview = $("takeNumReview");
+
+  var cameraPreview = $("cameraPreview"), camError = $("camError"), camErrorText = $("camErrorText"), retryCamBtn = $("retryCamBtn");
+  var exitLiveBtn = $("exitLiveBtn"), recDot = $("recDot"), recLabel = $("recLabel"), timecode = $("timecode");
+  var prompterPanel = $("prompterPanel"), prompterScroll = $("prompterScroll"), prompterText = $("prompterText");
+  var countdownOverlay = $("countdownOverlay"), countdownNum = $("countdownNum");
+  var flipCamBtn = $("flipCamBtn"), restartScrollBtn = $("restartScrollBtn");
+  var playPauseBtn = $("playPauseBtn"), playPauseIcon = $("playPauseIcon");
+  var recordBtn = $("recordBtn"), wpmUpBtn = $("wpmUpBtn"), wpmDownBtn = $("wpmDownBtn");
+
+  var reviewVideo = $("reviewVideo"), reviewDuration = $("reviewDuration");
+  var saveBtn = $("saveBtn"), retakeBtn = $("retakeBtn"), newScriptBtn = $("newScriptBtn"), saveNote = $("saveNote");
+
+  function pad(n){ return String(n).padStart(2, "0"); }
+  function clamp(v, lo, hi){ return Math.max(lo, Math.min(hi, v)); }
+  function formatClock(ms){
+    var totalSec = Math.round(ms / 1000);
+    var m = Math.floor(totalSec / 60), s = totalSec % 60;
+    return m + ":" + pad(s);
+  }
+
+  function showScreen(id){
+    ["screen-setup", "screen-live", "screen-review"].forEach(function(sid){
+      $(sid).classList.toggle("active", sid === id);
+    });
+  }
+
+  // ---------- persistence (per-viewer convenience only) ----------
+  function loadDraft(){
+    try {
+      var raw = localStorage.getItem("cueroll.draft");
+      if (!raw) return null;
+      return JSON.parse(raw);
+    } catch (e) { return null; }
+  }
+  function saveDraft(){
+    try {
+      localStorage.setItem("cueroll.draft", JSON.stringify({
+        script: scriptInput.value, wpm: state.wpm, size: state.size,
+        facing: state.facing, mirror: state.mirror, countdown: state.countdown
+      }));
+    } catch (e) { /* private mode etc — ignore */ }
+  }
+
+  // ---------- word count / duration ----------
+  function computeDuration(){
+    var text = scriptInput.value.trim();
+    var words = text.length ? text.split(/\s+/).length : 0;
+    state.scriptWords = words;
+    var ms = Math.max((words / state.wpm) * 60000, 4000);
+    state.durationMs = ms;
+    wordCountHint.textContent = words + (words === 1 ? " word · " : " words · ") + formatClock(ms) + " read";
+  }
+
+  // ---------- setup screen wiring ----------
+  var draft = loadDraft();
+  if (draft && typeof draft.script === "string" && draft.script.trim()) {
+    scriptInput.value = draft.script;
+  } else {
+    scriptInput.value = EXAMPLE_SCRIPT;
+  }
+  if (draft) {
+    if (draft.wpm) state.wpm = clamp(draft.wpm, 80, 220);
+    if (draft.size) state.size = draft.size;
+    if (draft.facing) state.facing = draft.facing;
+    state.mirror = !!draft.mirror;
+    state.countdown = draft.countdown !== false;
+  }
+  wpmSlider.value = state.wpm;
+  wpmReadout.textContent = state.wpm + " wpm";
+  mirrorToggle.checked = state.mirror;
+  countdownToggle.checked = state.countdown;
+  Array.prototype.forEach.call(sizeSegmented.querySelectorAll("button"), function(b){
+    b.classList.toggle("active", b.dataset.size === state.size);
+  });
+  Array.prototype.forEach.call(facingSegmented.querySelectorAll("button"), function(b){
+    b.classList.toggle("active", b.dataset.facing === state.facing);
+  });
+  computeDuration();
+
+  scriptInput.addEventListener("input", function(){ computeDuration(); saveDraft(); });
+  clearScriptBtn.addEventListener("click", function(){
+    scriptInput.value = "";
+    scriptInput.focus();
+    computeDuration();
+    saveDraft();
+  });
+  wpmSlider.addEventListener("input", function(){
+    state.wpm = parseInt(wpmSlider.value, 10);
+    wpmReadout.textContent = state.wpm + " wpm";
+    computeDuration();
+    saveDraft();
+  });
+  sizeSegmented.addEventListener("click", function(e){
+    var btn = e.target.closest("button[data-size]");
+    if (!btn) return;
+    state.size = btn.dataset.size;
+    Array.prototype.forEach.call(sizeSegmented.querySelectorAll("button"), function(b){
+      b.classList.toggle("active", b === btn);
+    });
+    applyTextSize();
+    saveDraft();
+  });
+  facingSegmented.addEventListener("click", function(e){
+    var btn = e.target.closest("button[data-facing]");
+    if (!btn) return;
+    state.facing = btn.dataset.facing;
+    Array.prototype.forEach.call(facingSegmented.querySelectorAll("button"), function(b){
+      b.classList.toggle("active", b === btn);
+    });
+    saveDraft();
+  });
+  mirrorToggle.addEventListener("change", function(){
+    state.mirror = mirrorToggle.checked;
+    applyMirror();
+    saveDraft();
+  });
+  countdownToggle.addEventListener("change", function(){
+    state.countdown = countdownToggle.checked;
+    saveDraft();
+  });
+
+  function applyTextSize(){
+    prompterText.classList.remove("size-s", "size-m", "size-l", "size-xl");
+    prompterText.classList.add("size-" + state.size);
+  }
+  function applyMirror(){
+    prompterPanel.classList.toggle("mirrored", state.mirror);
+  }
+
+  // ---------- scroll engine ----------
+  function measureRange(){
+    state.scrollRange = Math.max(prompterScroll.scrollHeight - prompterPanel.clientHeight, 0);
+  }
+  function renderScrollFrame(now){
+    if (!state.scrolling) return;
+    var elapsed = now - state.scrollStartTs;
+    var progress = clamp(elapsed / state.durationMs, 0, 1);
+    prompterScroll.style.transform = "translateY(-" + (progress * state.scrollRange) + "px)";
+    if (progress >= 1) {
+      state.scrolling = false;
+      state.scrollPausedOffset = 1;
+      updatePlayPauseUI();
+      return;
+    }
+    state.scrollRAF = requestAnimationFrame(renderScrollFrame);
+  }
+  function startScroll(){
+    measureRange();
+    state.scrollStartTs = performance.now() - (state.scrollPausedOffset * state.durationMs);
+    state.scrolling = true;
+    updatePlayPauseUI();
+    state.scrollRAF = requestAnimationFrame(renderScrollFrame);
+  }
+  function pauseScroll(){
+    if (!state.scrolling) return;
+    state.scrollPausedOffset = clamp((performance.now() - state.scrollStartTs) / state.durationMs, 0, 1);
+    state.scrolling = false;
+    if (state.scrollRAF) cancelAnimationFrame(state.scrollRAF);
+    updatePlayPauseUI();
+  }
+  function restartScroll(){
+    pauseScroll();
+    state.scrollPausedOffset = 0;
+    prompterScroll.style.transform = "translateY(0px)";
+  }
+  function updatePlayPauseUI(){
+    playPauseIcon.textContent = state.scrolling ? "❚❚" : "▶";
+  }
+
+  function nudgeWpm(delta){
+    var wasScrolling = state.scrolling;
+    var progress = state.scrollPausedOffset;
+    if (wasScrolling) {
+      progress = clamp((performance.now() - state.scrollStartTs) / state.durationMs, 0, 1);
+      pauseScroll();
+    }
+    state.wpm = clamp(state.wpm + delta, 80, 220);
+    computeDuration();
+    state.scrollPausedOffset = progress;
+    if (wasScrolling) startScroll();
+  }
+  wpmUpBtn.addEventListener("click", function(){ nudgeWpm(10); });
+  wpmDownBtn.addEventListener("click", function(){ nudgeWpm(-10); });
+  restartScrollBtn.addEventListener("click", restartScroll);
+  playPauseBtn.addEventListener("click", function(){
+    if (state.scrolling) pauseScroll(); else startScroll();
+  });
+
+  // ---------- camera ----------
+  function stopCamera(){
+    if (state.stream) {
+      state.stream.getTracks().forEach(function(t){ t.stop(); });
+      state.stream = null;
+    }
+  }
+  function setupCamera(){
+    camError.hidden = true;
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      camError.hidden = false;
+      camErrorText.textContent = "This browser can't access the camera. Try Chrome or Safari on your phone.";
+      return Promise.resolve();
+    }
+    return navigator.mediaDevices.getUserMedia({ video: { facingMode: state.facing }, audio: true })
+      .then(function(stream){
+        state.stream = stream;
+        cameraPreview.srcObject = stream;
+        cameraPreview.style.transform = state.facing === "user" ? "scaleX(-1)" : "none";
+        camError.hidden = true;
+      })
+      .catch(function(){
+        camError.hidden = false;
+        camErrorText.textContent = "Camera and mic access was blocked. Allow access for this page in your browser settings, then try again.";
+      });
+  }
+  retryCamBtn.addEventListener("click", function(){ setupCamera(); });
+  flipCamBtn.addEventListener("click", function(){
+    state.facing = state.facing === "user" ? "environment" : "user";
+    stopCamera();
+    setupCamera();
+  });
+
+  // ---------- recording ----------
+  function pickMimeType(){
+    if (!window.MediaRecorder || !MediaRecorder.isTypeSupported) return "";
+    var candidates = [
+      "video/mp4;codecs=h264,aac",
+      "video/webm;codecs=vp9,opus",
+      "video/webm;codecs=vp8,opus",
+      "video/webm"
+    ];
+    for (var i = 0; i < candidates.length; i++) {
+      if (MediaRecorder.isTypeSupported(candidates[i])) return candidates[i];
+    }
+    return "";
+  }
+
+  function updateTimecode(){
+    timecode.textContent = formatClock(performance.now() - state.recordStartTime);
+  }
+
+  function beginRecording(){
+    if (!state.stream || !window.MediaRecorder) {
+      camError.hidden = false;
+      camErrorText.textContent = "Recording isn't supported in this browser yet.";
+      return;
+    }
+    var mime = pickMimeType();
+    state.recordedMime = mime;
+    try {
+      state.recorder = mime ? new MediaRecorder(state.stream, { mimeType: mime }) : new MediaRecorder(state.stream);
+    } catch (e) {
+      state.recorder = new MediaRecorder(state.stream);
+    }
+    state.chunks = [];
+    state.recorder.ondataavailable = function(e){ if (e.data && e.data.size) state.chunks.push(e.data); };
+    state.recorder.onstop = onRecordingStopped;
+    state.recorder.start();
+    state.recording = true;
+    state.recordStartTime = performance.now();
+    recDot.classList.add("live");
+    recLabel.textContent = "REC";
+    recordBtn.classList.add("active");
+    recordBtn.setAttribute("aria-label", "Stop recording");
+    restartScroll();
+    startScroll();
+    timecode.textContent = "0:00";
+    state.timerInterval = setInterval(updateTimecode, 200);
+  }
+
+  function stopRecording(){
+    if (state.recorder && state.recorder.state !== "inactive") state.recorder.stop();
+    state.recording = false;
+    pauseScroll();
+    clearInterval(state.timerInterval);
+    recDot.classList.remove("live");
+    recLabel.textContent = "STANDBY";
+    recordBtn.classList.remove("active");
+    recordBtn.setAttribute("aria-label", "Start recording");
+  }
+
+  function onRecordingStopped(){
+    var blob = new Blob(state.chunks, { type: state.recordedMime || "video/webm" });
+    state.recordedBlob = blob;
+    showReview(blob);
+  }
+
+  function startRecordFlow(){
+    if (state.countdown) {
+      countdownOverlay.hidden = false;
+      var n = 3;
+      countdownNum.textContent = n;
+      var iv = setInterval(function(){
+        n -= 1;
+        if (n <= 0) {
+          clearInterval(iv);
+          countdownOverlay.hidden = true;
+          beginRecording();
+        } else {
+          countdownNum.textContent = n;
+        }
+      }, 700);
+    } else {
+      beginRecording();
+    }
+  }
+
+  recordBtn.addEventListener("click", function(){
+    if (state.recording) stopRecording(); else startRecordFlow();
+  });
+
+  // ---------- screen transitions ----------
+  startBtn.addEventListener("click", function(){
+    computeDuration();
+    takeNumLive.textContent = pad(state.take);
+    prompterText.textContent = scriptInput.value.trim() || "Your script will scroll here.";
+    applyTextSize();
+    applyMirror();
+    recLabel.textContent = "STANDBY";
+    showScreen("screen-live");
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){ restartScroll(); }); });
+    setupCamera();
+  });
+
+  exitLiveBtn.addEventListener("click", function(){
+    if (state.recording) stopRecording();
+    pauseScroll();
+    stopCamera();
+    showScreen("screen-setup");
+  });
+
+  function showReview(blob){
+    stopCamera();
+    var url = URL.createObjectURL(blob);
+    reviewVideo.src = url;
+    reviewDuration.textContent = timecode.textContent;
+    takeNumReview.textContent = pad(state.take);
+    saveNote.textContent = "";
+    showScreen("screen-review");
+  }
+
+  retakeBtn.addEventListener("click", function(){
+    state.take += 1;
+    takeNumLive.textContent = pad(state.take);
+    reviewVideo.pause();
+    if (reviewVideo.src) { URL.revokeObjectURL(reviewVideo.src); reviewVideo.removeAttribute("src"); }
+    showScreen("screen-live");
+    recLabel.textContent = "STANDBY";
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){ restartScroll(); }); });
+    setupCamera();
+  });
+
+  newScriptBtn.addEventListener("click", function(){
+    state.take = 1;
+    takeNumSetup.textContent = "01";
+    reviewVideo.pause();
+    if (reviewVideo.src) { URL.revokeObjectURL(reviewVideo.src); reviewVideo.removeAttribute("src"); }
+    showScreen("screen-setup");
+  });
+
+  // ---------- save (downloads capability) ----------
+  saveBtn.addEventListener("click", function(){
+    handleSave();
+  });
+  function downloadBlobDirect(blob, filename){
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 4000);
+  }
+  function handleSave(){
+    if (!state.recordedBlob) return;
+    var ext = (state.recordedMime || "").indexOf("mp4") !== -1 ? "mp4" : "webm";
+    var filename = "cue-roll-take-" + pad(state.take) + "." + ext;
+    saveBtn.disabled = true;
+    var use = window.claude && window.claude.use;
+    if (use) {
+      saveNote.textContent = "Waiting for you to confirm the save…";
+      window.claude.use("downloads").then(function(downloads){
+        if (!downloads) { downloadBlobDirect(state.recordedBlob, filename); saveNote.textContent = "Saved."; return; }
+        return downloads.save({ filename: filename, data: state.recordedBlob }).then(function(result){
+          saveNote.textContent = result.status === "saved" ? "Saved to your device." : "Sent to your chosen destination.";
+        }).catch(function(err){
+          var code = err && err.code;
+          if (code === "declined") saveNote.textContent = "Save cancelled.";
+          else { downloadBlobDirect(state.recordedBlob, filename); saveNote.textContent = "Saved."; }
+        });
+      }).finally(function(){ saveBtn.disabled = false; });
+    } else {
+      downloadBlobDirect(state.recordedBlob, filename);
+      saveNote.textContent = "Saved to your downloads. On iPhone, open the Files app or your Photos “Recently Added” to find it, or long‑press the video above and use Share.";
+      saveBtn.disabled = false;
+    }
+  }
+
+})();
+</script>
+
+</body>
+</html>
