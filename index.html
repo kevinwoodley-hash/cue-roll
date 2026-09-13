@@ -190,21 +190,45 @@
     position:fixed; inset:0; height:100vh; height:100dvh; overflow:hidden;
   }
   #cameraPreview{
+    position:absolute; width:1px; height:1px; opacity:0; pointer-events:none; top:0; left:0;
+  }
+  #cameraCanvas{
     position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
     background:#050607;
   }
+  .grid-overlay{ position:absolute; inset:0; z-index:2; pointer-events:none; }
+  .grid-line{ position:absolute; background:rgba(255,255,255,0.38); }
+  .grid-line.v{ top:0; bottom:0; width:1px; }
+  .grid-line.h{ left:0; right:0; height:1px; }
 
   .hud-top{
     position:absolute; top:0; left:0; right:0; z-index:5;
-    display:flex; align-items:center; justify-content:space-between;
+    display:flex; flex-direction:column; gap:10px;
     padding:calc(env(safe-area-inset-top) + 14px) 16px 12px;
-    background:linear-gradient(to bottom, rgba(9,10,12,0.72), transparent);
+    background:linear-gradient(to bottom, rgba(9,10,12,0.72), rgba(9,10,12,0.35) 70%, transparent);
   }
+  .hud-top-row{ display:flex; align-items:center; justify-content:space-between; }
   .hud-btn{
     appearance:none; border:none; border-radius:50%; width:36px; height:36px;
-    background:var(--scrim); color:var(--text); font-size:15px; cursor:pointer;
+    background:var(--scrim); color:var(--text); font-size:15px; cursor:pointer; flex:none;
   }
   .hud-center{ display:flex; align-items:center; gap:8px; }
+
+  .cam-controls-row{ display:flex; align-items:center; gap:8px; }
+  .chip-btn{
+    appearance:none; border:1px solid rgba(255,255,255,0.16); border-radius:999px;
+    background:var(--scrim); color:var(--text-dim); font-size:12.5px; font-weight:600;
+    padding:7px 13px; cursor:pointer; display:flex; align-items:center; gap:5px; flex:none;
+  }
+  .chip-btn .chip-icon{ font-size:13px; line-height:1; }
+  .chip-btn.active{ background:var(--accent-standby); color:var(--accent-standby-ink); border-color:var(--accent-standby); }
+  .zoom-control{
+    flex:1; display:flex; align-items:center; gap:8px;
+    background:var(--scrim); border:1px solid rgba(255,255,255,0.16); border-radius:999px;
+    padding:0 14px 0 4px; height:32px;
+  }
+  .zoom-control input[type="range"]{ height:32px; }
+  .zoom-control .mono{ font-size:12px; color:var(--text-dim); white-space:nowrap; }
   .rec-dot{
     width:9px; height:9px; border-radius:50%; background:var(--accent-standby);
     box-shadow:0 0 8px rgba(255,176,32,0.7);
@@ -216,7 +240,7 @@
   .timecode{ font-size:14px; color:var(--text); }
 
   .prompter-wrap{
-    position:absolute; left:0; right:0; top:16%; height:36%; z-index:4;
+    position:absolute; left:0; right:0; top:23%; height:31%; z-index:4;
     display:flex; padding:0 18px;
   }
   .prompter-panel{
@@ -247,6 +271,19 @@
   .countdown-overlay span{
     font-family:var(--font-display); font-weight:800; font-size:120px; color:var(--text);
   }
+
+  .filter-strip{
+    position:absolute; left:0; right:0; bottom:calc(env(safe-area-inset-bottom) + 104px); z-index:5;
+    display:flex; gap:8px; padding:0 16px; overflow-x:auto; -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  .filter-strip::-webkit-scrollbar{ display:none; }
+  .filter-chip{
+    appearance:none; border:1px solid rgba(255,255,255,0.16); border-radius:999px; flex:none;
+    background:var(--scrim); color:var(--text-dim); font-size:13px; font-weight:600;
+    padding:8px 15px; cursor:pointer;
+  }
+  .filter-chip.active{ background:var(--accent-standby); color:var(--accent-standby-ink); border-color:var(--accent-standby); }
 
   .hud-bottom{
     position:absolute; left:0; right:0; bottom:0; z-index:5;
@@ -379,15 +416,32 @@
 
   <section id="screen-live" class="screen">
     <video id="cameraPreview" autoplay muted playsinline></video>
+    <canvas id="cameraCanvas"></canvas>
+    <div class="grid-overlay" id="gridOverlay" hidden>
+      <span class="grid-line v" style="left:33.333%"></span>
+      <span class="grid-line v" style="left:66.667%"></span>
+      <span class="grid-line h" style="top:33.333%"></span>
+      <span class="grid-line h" style="top:66.667%"></span>
+    </div>
 
     <div class="hud-top">
-      <button type="button" id="exitLiveBtn" class="hud-btn" aria-label="Back to script">✕</button>
-      <div class="hud-center">
-        <span class="rec-dot" id="recDot"></span>
-        <span class="rec-label" id="recLabel">STANDBY</span>
-        <span class="mono timecode" id="timecode">0:00</span>
+      <div class="hud-top-row">
+        <button type="button" id="exitLiveBtn" class="hud-btn" aria-label="Back to script">✕</button>
+        <div class="hud-center">
+          <span class="rec-dot" id="recDot"></span>
+          <span class="rec-label" id="recLabel">STANDBY</span>
+          <span class="mono timecode" id="timecode">0:00</span>
+        </div>
+        <div class="take-readout small"><span class="take-label">Take</span><span class="take-num" id="takeNumLive">01</span></div>
       </div>
-      <div class="take-readout small"><span class="take-label">Take</span><span class="take-num" id="takeNumLive">01</span></div>
+      <div class="cam-controls-row">
+        <button type="button" id="gridBtn" class="chip-btn" aria-pressed="false"><span class="chip-icon">▦</span>Grid</button>
+        <button type="button" id="torchBtn" class="chip-btn" aria-pressed="false" hidden><span class="chip-icon">⚡</span>Flash</button>
+        <div class="zoom-control">
+          <input type="range" id="zoomSlider" min="1" max="3" step="0.1" value="1" aria-label="Zoom">
+          <span class="mono" id="zoomReadout">1.0×</span>
+        </div>
+      </div>
     </div>
 
     <div class="prompter-wrap">
@@ -397,6 +451,15 @@
           <p id="prompterText"></p>
         </div>
       </div>
+    </div>
+
+    <div class="filter-strip" id="filterStrip" role="tablist" aria-label="Filters">
+      <button type="button" class="filter-chip active" data-filter="normal">Normal</button>
+      <button type="button" class="filter-chip" data-filter="bw">B&amp;W</button>
+      <button type="button" class="filter-chip" data-filter="warm">Warm</button>
+      <button type="button" class="filter-chip" data-filter="cool">Cool</button>
+      <button type="button" class="filter-chip" data-filter="vivid">Vivid</button>
+      <button type="button" class="filter-chip" data-filter="vintage">Vintage</button>
     </div>
 
     <div class="countdown-overlay" id="countdownOverlay" hidden><span id="countdownNum">3</span></div>
@@ -452,13 +515,25 @@
 
   var EXAMPLE_SCRIPT = "Hey — I'm just testing out Cue Roll before my real recording.\n\nIf you're seeing these words scroll by while you're on camera, it's working: the text moves at a steady pace so you can read it without staring down at your phone or losing your place.\n\nOnce you're happy with the speed and text size, clear this out and drop in your real script. Three, two, one — action.";
 
+  var FILTERS = {
+    normal:  { css: "" },
+    bw:      { css: "grayscale(1) contrast(1.08)" },
+    warm:    { css: "sepia(0.22) saturate(1.35) hue-rotate(-6deg) brightness(1.02)" },
+    cool:    { css: "saturate(1.15) hue-rotate(10deg) brightness(1.03)" },
+    vivid:   { css: "saturate(1.55) contrast(1.15)" },
+    vintage: { css: "sepia(0.4) contrast(0.9) brightness(1.05) saturate(0.8)" }
+  };
+
   var state = {
     wpm: 140, size: "m", facing: "user", mirror: false, countdown: true,
     take: 1, scriptWords: 0, durationMs: 4000,
     scrolling: false, recording: false,
     scrollStartTs: 0, scrollPausedOffset: 0, scrollRange: 0, scrollRAF: null,
     stream: null, recorder: null, chunks: [], recordedMime: "", recordedBlob: null,
-    recordStartTime: 0, timerInterval: null
+    recordStartTime: 0, timerInterval: null,
+    filterId: "normal", zoom: 1, grid: false,
+    torchOn: false, torchSupported: false, videoTrack: null,
+    canvasCtx: null, drawRAF: null
   };
 
   var $ = function(id){ return document.getElementById(id); };
@@ -469,7 +544,9 @@
   var startBtn = $("startBtn"), clearScriptBtn = $("clearScriptBtn");
   var takeNumSetup = $("takeNumSetup"), takeNumLive = $("takeNumLive"), takeNumReview = $("takeNumReview");
 
-  var cameraPreview = $("cameraPreview"), camError = $("camError"), camErrorText = $("camErrorText"), retryCamBtn = $("retryCamBtn");
+  var cameraPreview = $("cameraPreview"), cameraCanvas = $("cameraCanvas"), camError = $("camError"), camErrorText = $("camErrorText"), retryCamBtn = $("retryCamBtn");
+  var gridOverlay = $("gridOverlay"), gridBtn = $("gridBtn"), torchBtn = $("torchBtn");
+  var zoomSlider = $("zoomSlider"), zoomReadout = $("zoomReadout"), filterStrip = $("filterStrip");
   var exitLiveBtn = $("exitLiveBtn"), recDot = $("recDot"), recLabel = $("recLabel"), timecode = $("timecode");
   var prompterPanel = $("prompterPanel"), prompterScroll = $("prompterScroll"), prompterText = $("prompterText");
   var countdownOverlay = $("countdownOverlay"), countdownNum = $("countdownNum");
@@ -656,12 +733,33 @@
     if (state.scrolling) pauseScroll(); else startScroll();
   });
 
-  // ---------- camera ----------
+  // ---------- camera + canvas pipeline (filters/zoom are drawn in, so they're baked into the recording) ----------
+  function drawFrame(){
+    var v = cameraPreview;
+    if (v.videoWidth && v.videoHeight) {
+      if (cameraCanvas.width !== v.videoWidth || cameraCanvas.height !== v.videoHeight) {
+        cameraCanvas.width = v.videoWidth;
+        cameraCanvas.height = v.videoHeight;
+      }
+      var ctx = state.canvasCtx || (state.canvasCtx = cameraCanvas.getContext("2d"));
+      var cropW = v.videoWidth / state.zoom, cropH = v.videoHeight / state.zoom;
+      var sx = (v.videoWidth - cropW) / 2, sy = (v.videoHeight - cropH) / 2;
+      ctx.filter = FILTERS[state.filterId].css || "none";
+      ctx.drawImage(v, sx, sy, cropW, cropH, 0, 0, cameraCanvas.width, cameraCanvas.height);
+    }
+    state.drawRAF = requestAnimationFrame(drawFrame);
+  }
   function stopCamera(){
+    if (state.drawRAF) { cancelAnimationFrame(state.drawRAF); state.drawRAF = null; }
     if (state.stream) {
       state.stream.getTracks().forEach(function(t){ t.stop(); });
       state.stream = null;
     }
+    state.videoTrack = null;
+    state.torchSupported = false;
+    state.torchOn = false;
+    torchBtn.hidden = true;
+    torchBtn.classList.remove("active");
   }
   function setupCamera(){
     camError.hidden = true;
@@ -674,8 +772,15 @@
       .then(function(stream){
         state.stream = stream;
         cameraPreview.srcObject = stream;
-        cameraPreview.style.transform = state.facing === "user" ? "scaleX(-1)" : "none";
+        cameraCanvas.style.transform = state.facing === "user" ? "scaleX(-1)" : "none";
         camError.hidden = true;
+
+        state.videoTrack = stream.getVideoTracks()[0];
+        var caps = (state.videoTrack && state.videoTrack.getCapabilities) ? state.videoTrack.getCapabilities() : {};
+        state.torchSupported = !!(caps && caps.torch);
+        torchBtn.hidden = !state.torchSupported;
+
+        if (!state.drawRAF) state.drawRAF = requestAnimationFrame(drawFrame);
       })
       .catch(function(){
         camError.hidden = false;
@@ -687,6 +792,35 @@
     state.facing = state.facing === "user" ? "environment" : "user";
     stopCamera();
     setupCamera();
+  });
+
+  // ---------- effects: grid, zoom, flash, filters ----------
+  gridBtn.addEventListener("click", function(){
+    state.grid = !state.grid;
+    gridOverlay.hidden = !state.grid;
+    gridBtn.classList.toggle("active", state.grid);
+    gridBtn.setAttribute("aria-pressed", String(state.grid));
+  });
+  torchBtn.addEventListener("click", function(){
+    if (!state.torchSupported || !state.videoTrack) return;
+    var next = !state.torchOn;
+    state.videoTrack.applyConstraints({ advanced: [{ torch: next }] }).then(function(){
+      state.torchOn = next;
+      torchBtn.classList.toggle("active", state.torchOn);
+      torchBtn.setAttribute("aria-pressed", String(state.torchOn));
+    }).catch(function(){ /* device refused — leave state as-is */ });
+  });
+  zoomSlider.addEventListener("input", function(){
+    state.zoom = parseFloat(zoomSlider.value);
+    zoomReadout.textContent = state.zoom.toFixed(1) + "×";
+  });
+  filterStrip.addEventListener("click", function(e){
+    var btn = e.target.closest("button[data-filter]");
+    if (!btn) return;
+    state.filterId = btn.dataset.filter;
+    Array.prototype.forEach.call(filterStrip.querySelectorAll("button"), function(b){
+      b.classList.toggle("active", b === btn);
+    });
   });
 
   // ---------- recording ----------
@@ -709,17 +843,25 @@
   }
 
   function beginRecording(){
-    if (!state.stream || !window.MediaRecorder) {
+    if (!state.stream || !window.MediaRecorder || !cameraCanvas.captureStream) {
       camError.hidden = false;
       camErrorText.textContent = "Recording isn't supported in this browser yet.";
       return;
     }
+    // Record the canvas (filters + zoom are drawn into it) plus the mic track,
+    // so effects are baked into the saved video, not just the on-screen preview.
+    var canvasStream = cameraCanvas.captureStream(30);
+    var tracks = canvasStream.getVideoTracks().slice();
+    var audioTrack = state.stream.getAudioTracks()[0];
+    if (audioTrack) tracks.push(audioTrack);
+    var recordStream = new MediaStream(tracks);
+
     var mime = pickMimeType();
     state.recordedMime = mime;
     try {
-      state.recorder = mime ? new MediaRecorder(state.stream, { mimeType: mime }) : new MediaRecorder(state.stream);
+      state.recorder = mime ? new MediaRecorder(recordStream, { mimeType: mime }) : new MediaRecorder(recordStream);
     } catch (e) {
-      state.recorder = new MediaRecorder(state.stream);
+      state.recorder = new MediaRecorder(recordStream);
     }
     state.chunks = [];
     state.recorder.ondataavailable = function(e){ if (e.data && e.data.size) state.chunks.push(e.data); };
@@ -871,4 +1013,3 @@
 
 </body>
 </html>
-<!-- redeploy trigger 1789290009 -->
