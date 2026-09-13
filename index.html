@@ -130,7 +130,10 @@
   }
   #scriptInput::placeholder{ color:var(--text-faint); }
 
-  .script-actions{ display:flex; justify-content:flex-end; }
+  .script-actions{
+    display:flex; align-items:baseline; justify-content:space-between; gap:12px;
+    flex-wrap:wrap;
+  }
 
   .settings-grid{ display:flex; flex-direction:column; gap:20px; }
   .setting{ display:flex; flex-direction:column; gap:10px; }
@@ -269,6 +272,7 @@
   #prompterText.size-m{ font-size:28px; }
   #prompterText.size-l{ font-size:36px; }
   #prompterText.size-xl{ font-size:46px; }
+  #prompterText .emph{ color:var(--accent-standby); font-weight:800; }
   .prompter-panel.mirrored #prompterText{ transform:scaleX(-1); }
 
   .countdown-overlay{
@@ -371,6 +375,7 @@
         </div>
         <textarea id="scriptInput" spellcheck="false"></textarea>
         <div class="script-actions">
+          <span class="setting-note">Wrap words in **double asterisks** to highlight them for emphasis</span>
           <button type="button" id="clearScriptBtn" class="linklike">Clear example text</button>
         </div>
       </div>
@@ -525,7 +530,7 @@
 (function(){
   "use strict";
 
-  var EXAMPLE_SCRIPT = "Hey — I'm just testing out Cue Roll before my real recording.\n\nIf you're seeing these words scroll by while you're on camera, it's working: the text moves at a steady pace so you can read it without staring down at your phone or losing your place.\n\nOnce you're happy with the speed and text size, clear this out and drop in your real script. Three, two, one — action.";
+  var EXAMPLE_SCRIPT = "Hey — I'm just testing out Cue Roll before my real recording.\n\nIf you're seeing these words scroll by while you're on camera, it's **working**: the text moves at a steady pace so you can read it without staring down at your phone or losing your place.\n\nSee those bold amber words? That's how you cue yourself to **emphasize** something — just wrap it in double asterisks anywhere in your script.\n\nOnce you're happy with the speed and text size, clear this out and drop in your real script. Three, two, one — action.";
 
   var FILTERS = {
     normal:  { css: "" },
@@ -683,6 +688,14 @@
     state.countdown = countdownToggle.checked;
     saveDraft();
   });
+
+  // ---------- emphasis markup: **word or phrase** renders bold + highlighted ----------
+  function escapeHtml(s){
+    return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+  function renderScriptHTML(text){
+    return escapeHtml(text).replace(/\*\*([^\n*]+?)\*\*/g, '<strong class="emph">$1</strong>');
+  }
 
   function applyTextSize(){
     prompterText.classList.remove("size-s", "size-m", "size-l", "size-xl");
@@ -1095,7 +1108,7 @@
   startBtn.addEventListener("click", function(){
     computeDuration();
     takeNumLive.textContent = pad(state.take);
-    prompterText.textContent = scriptInput.value.trim() || "Your script will scroll here.";
+    prompterText.innerHTML = renderScriptHTML(scriptInput.value.trim() || "Your script will scroll here.");
     applyTextSize();
     applyMirror();
     recLabel.textContent = "STANDBY";
